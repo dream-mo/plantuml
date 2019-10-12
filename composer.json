@@ -17,6 +17,7 @@
             "email": "dreammovip@163.com"
         }
     ],
+    "minimum-stability": "stable",
     "repositories": [{
         "type": "composer",
         "url": "https://packagist.oneitfarm.com"
