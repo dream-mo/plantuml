@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4fa9fd9f5e41355c65821c1fac5f30f1",
+    "content-hash": "5aa17045a9a669472e31f0518a089351",
     "packages": [
         {
             "name": "jan-swiecki/simple-annotations",
