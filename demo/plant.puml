@@ -1,0 +1,51 @@
+@startuml
+
+abstract class Animal
+{
++name:string
+#age:int
+
+}
+class GroupDogs
+{
++dogs:Dog
+
+}
+class Leg
+{
+
+}
+class Hat
+{
+-color:string
+
+}
+interface Fly
+{
++startFly(string:Animal):mixed
+
+}
+class Dog
+{
+-leg:Leg
+-hat:Hat
++name:string
+#age:int
++startFly(Animal:$animal):string
+
+}
+
+GroupDogs "1"  o-- "many" Dog
+
+
+
+
+class Dog extends Animal
+class Dog implements Fly
+Dog "1"  *-- "1" Leg
+Dog "1"  -- "1" Hat
+
+Fly --> Animal
+
+
+@enduml

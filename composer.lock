@@ -1,0 +1,68 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4fa9fd9f5e41355c65821c1fac5f30f1",
+    "packages": [
+        {
+            "name": "jan-swiecki/simple-annotations",
+            "version": "0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jan-swiecki/php-simple-annotations.git",
+                "reference": "a10f772b24ecbc6b2a9c93c7ba9f4c6e879133a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jan-swiecki/php-simple-annotations/zipball/a10f772b24ecbc6b2a9c93c7ba9f4c6e879133a6",
+                "reference": "a10f772b24ecbc6b2a9c93c7ba9f4c6e879133a6",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DocBlockReader": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Święcki",
+                    "email": "jan.swiecki@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple annotation parser",
+            "homepage": "https://github.com/jan-swiecki/php-simple-annotations",
+            "keywords": [
+                "annotation",
+                "annotations",
+                "docblock",
+                "parser"
+            ],
+            "time": "2015-08-17T18:38:50+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

@@ -1,0 +1,24 @@
+{
+    "name": "dreammo/plantuml",
+    "description": "Convert php source project to plantuml language format",
+    "license": "MIT",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Dreammo\\": "src/Dreammo"
+        }
+    },
+    "require": {
+        "jan-swiecki/simple-annotations": "0.3.1"
+    },
+    "authors": [
+        {
+            "name": "dreammo",
+            "email": "dreammovip@163.com"
+        }
+    ],
+    "repositories": [{
+        "type": "composer",
+        "url": "https://packagist.oneitfarm.com"
+    }]
+}
