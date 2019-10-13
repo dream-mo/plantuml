@@ -20,9 +20,5 @@
         }
     ],
     "bin": ["bin/puml"],
-    "minimum-stability": "stable",
-    "repositories": [{
-        "type": "composer",
-        "url": "https://packagist.oneitfarm.com"
-    }]
+    "minimum-stability": "stable"
 }
