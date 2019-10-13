@@ -4,10 +4,10 @@
 
 Get [composer](http://getcomposer.org/) and learn to use it.
 
-Library is on [packagist](https://packagist.org/packages/).
+Library is on [packagist](https://packagist.org/packages/dreammo/plantuml).
 
 ```bash
-  composer require 
+  composer require dreammo/plantuml
 ```
 
 ## Introduction
@@ -23,20 +23,13 @@ online plantuml editor website: [liveuml](https://liveuml.com/)
 ##Quick Start
 
  ```php
- <?php
-include_once "../vendor/autoload.php";
-
-$path = __DIR__.'/demo/test'; // Source code directory
-
-$writer = new \Dreammo\Plantuml\Helper\PlantUMLWriter($path);
-
-$writer->write("./plant.puml"); // Target file name
+ ./vendor/bin/puml ./demo/test  diagram.puml
  ```
 
  then
 
    you can use like IDE phpstorm and install plugin "plantuml", and you can 
- Preview class diagram. You can try directly by using demo.php in the demo directory.
+ Preview class diagram. You can try directly by using demo/test do demo test
  
 
 ## Annotation and class diagram relationship description
