@@ -4,9 +4,7 @@
     "license": "MIT",
     "type": "library",
     "autoload": {
-        "psr-4": {
-            "Dreammo\\": "src/Dreammo"
-        }
+        "classmap":["src/Dreammo"]
     },
     "require": {
         "php": ">=5.6",
