@@ -20,7 +20,7 @@ planuml document: [plantuml](http://plantuml.com/zh/class-diagram)
 
 online plantuml editor website: [liveuml](https://liveuml.com/)
 
-##Quick Start
+## Quick Start
 
  ```php
  ./vendor/bin/puml ./demo/test  diagram.puml
