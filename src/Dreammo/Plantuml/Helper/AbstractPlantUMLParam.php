@@ -6,7 +6,7 @@ namespace Dreammo\Plantuml\Helper;
  * Class AbstractPlantUMLParam
  * @package Dreammo\Plantuml\Helper
  *
- * 参数抽象类
+ * Param Abstract Class
  *
  */
 class AbstractPlantUMLParam
@@ -67,16 +67,20 @@ class AbstractPlantUMLParam
     public function getAccessLevel()
     {
         switch ($this->accessLevel) {
-            case 'public': {
+            case 'public':
+            {
                 return '+';
             }
-            case 'private': {
+            case 'private':
+            {
                 return '-';
             }
-            case 'protected': {
+            case 'protected':
+            {
                 return '#';
             }
-            default: {
+            default:
+            {
                 return '';
             }
         }
@@ -89,5 +93,4 @@ class AbstractPlantUMLParam
     {
         $this->accessLevel = $accessLevel;
     }
-
 }

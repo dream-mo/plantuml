@@ -6,7 +6,7 @@ namespace Dreammo\Plantuml\Helper;
  * Class PlantUMLMethodParam
  * @package Dreammo\Plantuml\Helper
  *
- * plantuml方法参数类
+ * plantuml method param class
  *
  */
 class PlantUMLMethodParam extends AbstractPlantUMLParam

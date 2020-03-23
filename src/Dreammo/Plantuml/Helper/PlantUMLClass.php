@@ -8,7 +8,7 @@ use DocBlockReader\Reader;
  * Class PlantUMLClass
  * @package Dreammo\Plantuml\Helper
  *
- * plantuml的Class类
+ * PlantUMLClass
  *
  */
 class PlantUMLClass
@@ -26,7 +26,7 @@ class PlantUMLClass
     /**
      * @var PlantUMLProperty[]
      *
-     * 数据对象集合
+     * data object collection
      *
      */
     private $attrs = [];
@@ -34,16 +34,15 @@ class PlantUMLClass
     /**
      * @var PlantUMLMethod[]
      *
-     * 方法集合
+     * function collection
      *
      */
     private $methods = [];
 
-
     /**
      * @var PlantUMLClass
      *
-     * 父类
+     * parent class
      *
      */
     private $parentClass = null;
@@ -51,7 +50,7 @@ class PlantUMLClass
     /**
      * @var PlantUMLClass[]
      *
-     * 实现接口类
+     * implement interface classes
      *
      */
     private $implementsInterfaces = [];
@@ -59,18 +58,18 @@ class PlantUMLClass
     /**
      * @var bool
      *
-     * 是否是抽象类
+     * is or not abstract class
+     *
      */
     private $isAbstract = false;
 
     /**
      * @var bool
      *
-     * 是否是接口类型
+     * is or not interface
      *
      */
     private $isInterface = false;
-
 
     /**
      * PlantUMLClass constructor.
@@ -78,12 +77,11 @@ class PlantUMLClass
      * @param string $name
      *
      */
-    public function __construct($package , $name)
+    public function __construct($package, $name)
     {
         $this->package = $package;
         $this->name = $name;
     }
-
 
     /**
      * @return string
@@ -231,33 +229,33 @@ class PlantUMLClass
     /**
      * @return string
      *
-     * 获取当前class转换为plantuml之后的字符串
+     * get current class trans to plantuml string
      *
      */
     public function getClassUmlString()
     {
-        // 属性
+        // attr
         $attrStr = '';
         foreach ($this->getAttrs() as $attr) {
-            $attrStr .= $attr->getAccessLevel().$attr->getName().':'.$attr->getDataType().PHP_EOL;
+            $attrStr .= $attr->getAccessLevel() . $attr->getName() . ':' . $attr->getDataType() . PHP_EOL;
         }
 
-        // 方法
+        // function
         $methodStr = '';
         foreach ($this->getMethods() as $method) {
-            $methodStr .= $method->getAccessLevel().$method->getName().'(';
+            $methodStr .= $method->getAccessLevel() . $method->getName() . '(';
             $paramStrs = '';
             foreach ($method->getParams() as $param) {
-                $paramStrs .= $param->getName().':'.$param->getDataType().', ';
+                $paramStrs .= $param->getName() . ':' . $param->getDataType() . ', ';
             }
             $paramStrs = rtrim($paramStrs, ', ');
-            $methodStr .= $paramStrs.'):'.$method->getReturnDataType().PHP_EOL;
+            $methodStr .= $paramStrs . '):' . $method->getReturnDataType() . PHP_EOL;
         }
 
-        // class内部数据
-        $classBodyStr = $attrStr.$methodStr;
+        // class inner data
+        $classBodyStr = $attrStr . $methodStr;
 
-        // 整体数据
+        // whole string
         $wholeClassUml = sprintf($this->getTemplateString(), $classBodyStr);
 
         return $wholeClassUml;
@@ -266,48 +264,48 @@ class PlantUMLClass
     /**
      * @param $originClassNames
      * @return string
-     * @throws Exception
+     * @throws \Exception
      *
-     * 获取类之间关系描述plantuml字符串
+     * Get the description of the relationship between the plantuml strings
      *
      */
     public function getClassRelationString($originClassNames)
     {
-        // 继承关系
+        // extends relation
         $extendsStr = '';
 
         if ($this->getParentClass()) {
             if ($this->isAbstract()) {
-                $className = 'abstract class '.$this->getName();
-            }else if ($this->isInterface()) {
-                $className = 'interface '.$this->getName();
-            }else{
-                $className = 'class '.$this->getName();
+                $className = 'abstract class ' . $this->getName();
+            } else if ($this->isInterface()) {
+                $className = 'interface ' . $this->getName();
+            } else {
+                $className = 'class ' . $this->getName();
             }
-            $extendsStr .= $className.' extends '.$this->getParentClass()->getName().PHP_EOL;
+            $extendsStr .= $className . ' extends ' . $this->getParentClass()->getName() . PHP_EOL;
         }
 
-        // 实现关系
+        // Realize relationship
         foreach ($this->getImplementsInterfaces() as $implementsInterface) {
             if ($implementsInterface) {
                 if ($this->isAbstract()) {
-                    $className = 'abstract class '.$this->getName();
-                }else if ($this->isInterface()) {
-                    $className = 'interface '.$this->getName();
-                }else{
-                    $className = 'class '.$this->getName();
+                    $className = 'abstract class ' . $this->getName();
+                } else if ($this->isInterface()) {
+                    $className = 'interface ' . $this->getName();
+                } else {
+                    $className = 'class ' . $this->getName();
                 }
-                $extendsStr .= $className.' implements '.$implementsInterface->getName().PHP_EOL;
+                $extendsStr .= $className . ' implements ' . $implementsInterface->getName() . PHP_EOL;
             }
         }
 
-        // 组合关系 聚合关系 普通关联关系
+        // Combination relationship , Aggregate relationship ,Ordinary association relationship
         $attrRelation = [];
         foreach ($this->attrs as $attr) {
             $reader = new Reader($this->name, $attr->getName(), 'property');
-            $aggregationClass = $reader->getParameter('Agg'); // 聚合类型
-            $compositionClass = $reader->getParameter('Comp'); // 组合类型
-            $associationClass = $reader->getParameter('Assoc'); // 普通关联关系
+            $aggregationClass = $reader->getParameter('Agg'); //   Aggregate relationship
+            $compositionClass = $reader->getParameter('Comp'); //  Combination relationship
+            $associationClass = $reader->getParameter('Assoc'); // Ordinary association relationship
 
             $aggStr = $this->handleRelation($aggregationClass, $originClassNames, 'o--');
             $compStr = $this->handleRelation($compositionClass, $originClassNames, '*--');
@@ -329,7 +327,7 @@ class PlantUMLClass
      * @param $flags
      * @return string
      *
-     * 处理关系
+     * handle relation
      *
      */
     private function handleRelation($relationClassAnnotation, $originClassNames, $flags)
@@ -340,13 +338,11 @@ class PlantUMLClass
             return $attrRelation;
         }
 
-
-
-        $note  = [];
+        $note = [];
         if (strpos($relationClassAnnotation, '[]') !== false) {
             $note[] = '"1"';
             $note[] = '"many"';
-        }else{
+        } else {
             $note[] = '"1"';
             $note[] = '"1"';
         }
@@ -354,7 +350,8 @@ class PlantUMLClass
         $relationClassAnnotation = str_replace("[]", '', $relationClassAnnotation);
         if (strpos($relationClassAnnotation, '\\') === false && $relationClassAnnotation) {
             foreach ($originClassNames as $originClassName) {
-                // 类名称结尾 则拿到全文限定类名称  暂时前提条件时 多个包之间没有重复类名
+                // At the end of the class name, get the full text qualified class name.
+                // For the temporary prerequisite, there is no duplicate class name between multiple packages.
                 if (strchr($originClassName, $relationClassAnnotation) == $relationClassAnnotation) {
                     $relationClassAnnotation = $originClassName;
                     break;
@@ -362,14 +359,10 @@ class PlantUMLClass
             }
         }
 
-
-
         if ($relationClassAnnotation && in_array($relationClassAnnotation, $originClassNames, true)) {
             $relationClassName = str_replace("\\", '.', $relationClassAnnotation);
             $attrRelation = $this->getName() . " {$note[0]}  {$flags} {$note[1]} " . $relationClassName . PHP_EOL;
         }
-
-
 
         return $attrRelation;
     }
@@ -378,22 +371,21 @@ class PlantUMLClass
      * @param $originClassNames
      * @return string
      *
-     * 获取方法参数类依赖关系
+     * Get method parameter class dependencies
      *
      */
     public function getMethodClassRelationString($originClassNames)
     {
-        //方法依赖关系
+        // Method dependency
         $dependStr = '';
         foreach ($this->methods as $method) {
             $params = $method->getParams();
             foreach ($params as $param) {
-                if (in_array($param->getDataType(),$originClassNames, true)) {
-                    $dependName = str_replace('\\','.',$param->getDataType());
-                    $dependStr .= $this->getName().' --> '.$dependName.PHP_EOL;
+                if (in_array($param->getDataType(), $originClassNames, true)) {
+                    $dependName = str_replace('\\', '.', $param->getDataType());
+                    $dependStr .= $this->getName() . ' --> ' . $dependName . PHP_EOL;
                 }
             }
-
         }
 
         return $dependStr;
@@ -402,7 +394,7 @@ class PlantUMLClass
     /**
      * @return string
      *
-     * 根据class的类型获取palntuml模板
+     * Get palntuml template based on class type
      *
      */
     private function getTemplateString()
@@ -414,14 +406,14 @@ interface {$this->getName()}
 %s
 }
 STR;
-        }else if ($this->isAbstract()) {
+        } else if ($this->isAbstract()) {
             $classUml = <<<STR
 abstract class {$this->getName()}
 {
 %s
 }
 STR;
-        } else{
+        } else {
             $classUml = <<<STR
 class {$this->getName()}
 {

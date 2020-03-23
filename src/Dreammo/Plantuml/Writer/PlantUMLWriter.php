@@ -8,7 +8,7 @@ use DocBlockReader\Reader;
  * Class PlantUMLWriter
  * @package Dreammo\Plantuml\Helper
  *
- * 生成plantuml文件类
+ * Generate plantuml file class
  *
  */
 class PlantUMLWriter
@@ -16,41 +16,43 @@ class PlantUMLWriter
     /**
      * @var array
      *
-     * 扫描到的所有类
+     * All classes scanned
+     *
      */
     private $originClassNames = [];
 
     /**
      * PlantUMLWriter constructor.
+     *
      * @param $sourcePath
      *
-     * 传入需要分析的源码目录的路径
+     * Path to the source directory to be analyzed
      *
      */
     public function __construct($sourcePath)
     {
-        // 获取还未include源码目录php文件 已经定义好的类名(全文限定名)数组
+        // Get an array of class names (full text qualified names) that have not been included in the source directory php files
         $oldClasses = get_declared_classes();
 
-        // include扫描的目标源码目录下的所有php文件
+        // include scan all php files in the target source directory
         $sourcePath = rtrim($sourcePath, '\\');
         $sourcePath = rtrim($sourcePath, '/');
         $this->scanDirFolder($sourcePath);
 
-        // 获取当前include之后总的定义好的类名(全文限定名)数组
+        // Get the total defined class name (full text qualified name) array after the current include
         $allClasses = get_declared_classes();
 
-        // 求差集 拿到源码定义好的所有类名数组
+        // Find the difference set and get an array of all the class names defined by the source code
         $diffClassNames = array_diff($allClasses, $oldClasses);
 
-        // 排除Composer的类
+        // Exclude Composer classes
         foreach ($diffClassNames as $diffClassName) {
             if (strpos($diffClassName, 'Composer') !== false) {
                 continue;
             }
         }
 
-        // 保存要处理分析的classNames
+        // Save the classNames to be processed for analysis
         $this->originClassNames = $diffClassNames;
     }
 
@@ -58,7 +60,7 @@ class PlantUMLWriter
      * @param $targetFileName
      * @throws \ReflectionException
      *
-     * 生成plantuml文件
+     * Generate plantuml file
      *
      */
     public function write($targetFileName)
@@ -70,8 +72,9 @@ class PlantUMLWriter
     /**
      * @return array
      * @throws \ReflectionException
+     * @throws \Exception
      *
-     * 将class以及涉及到的interface转换
+     * Converting classes and related interfaces
      *
      */
     private function getTransformedClass()
@@ -117,7 +120,7 @@ class PlantUMLWriter
      * @param $plantUmlClasses
      * @param $targetFileName
      *
-     * 绘制palntuml文本
+     * Draw palntuml text
      *
      */
     private function draw($plantUmlClasses, $targetFileName)
@@ -131,18 +134,18 @@ class PlantUMLWriter
 STR;
         $allClassStr = '';
 
-        // 处理每个Class的定义
+        // Handle the definition of each Class
         foreach ($plantUmlClasses as $plantUmlClass) {
-            $allClassStr .= $plantUmlClass->getClassUmlString().PHP_EOL;
+            $allClassStr .= $plantUmlClass->getClassUmlString() . PHP_EOL;
         }
 
-        // 处理class关系定义
+        // Handling class relationship definitions
         $extendsStr = '';
         foreach ($plantUmlClasses as $plantUmlClass) {
-            $extendsStr .= $plantUmlClass->getClassRelationString($this->originClassNames).PHP_EOL;
+            $extendsStr .= $plantUmlClass->getClassRelationString($this->originClassNames) . PHP_EOL;
         }
 
-        // 处理method依赖关系定义
+        // Handling method dependency definitions
         foreach ($plantUmlClasses as $plantUmlClass) {
             $extendsStr .= $plantUmlClass->getMethodClassRelationString($this->originClassNames);
         }
@@ -150,10 +153,10 @@ STR;
         $allClassStr .= $extendsStr;
         $uml = sprintf($uml, $allClassStr);
 
-        // 写入文件
-        file_put_contents( $targetFileName, $uml);
+        // Write to file
+        file_put_contents($targetFileName, $uml);
 
-        echo "Successfully generated".PHP_EOL;
+        echo "Congratulations! Successfully generated" . PHP_EOL;
     }
 
     /**
@@ -161,7 +164,6 @@ STR;
      * @param $plantUmlClasses
      * @return PlantUMLClass
      * @throws \Exception
-     *
      *
      */
     private function transformClassNames(\ReflectionClass $reflectionClass, &$plantUmlClasses)
@@ -195,49 +197,50 @@ STR;
      * @return array
      * @throws \Exception
      *
-     * 转换类的方法
+     * Methods of Conversion Class
      *
      */
     private function transformClassMethods(\ReflectionClass $reflectionClass)
     {
         $plantUmlMethods = [];
 
-        //方法
+        //methods
         $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
 
-            // 忽略魔术方法
+            // Ignore magic methods
             if (strpos($method->getName(), "__") !== false) {
                 continue;
             }
 
-            // 获取方法上面的注解@return
+            // Get annotation on method @return
             $reader = new Reader($reflectionClass->getName(), $method->getName());
-            $returnValType = $reader->getParameter('return'); // 通过注解获取到的数据类型
+            // Data types obtained through annotations
+            $returnValType = $reader->getParameter('return');
             $methodName = $method->getName();
 
-            // 访问修饰符
+            // Access modifier
             $accessLevel = 'public';
             if ($method->isPrivate()) {
                 $accessLevel = 'private';
-            }else if ($method->isProtected()) {
+            } else if ($method->isProtected()) {
                 $accessLevel = 'protected';
             }
 
-            // 形参
+            // Formal parameter
             $params = $reader->getVariableDeclarations('param');
 
             $plantUmlParams = [];
             foreach ($params as $param) {
                 if ($param == $returnValType) {
                     continue;
-                }else{
+                } else {
                     $plantUmlParam = new PlantUMLMethodParam($param['type'], $param['name'], '');
                     $plantUmlParams[] = $plantUmlParam;
                 }
             }
 
-            $plantUmlMethod = new PlantUMLMethod($methodName, $plantUmlParams,$returnValType, $accessLevel);
+            $plantUmlMethod = new PlantUMLMethod($methodName, $plantUmlParams, $returnValType, $accessLevel);
             $plantUmlMethods[] = $plantUmlMethod;
         }
 
@@ -249,27 +252,28 @@ STR;
      * @return array
      * @throws \Exception
      *
-     * 转换类的属性
+     * Transforming Class Properties
      *
      */
     private function transformClassProperties(\ReflectionClass $reflectionClass)
     {
         $plantUmlProperties = [];
 
-        // 属性分析
+        // Attribute analysis
         $attrs = $reflectionClass->getProperties();
         foreach ($attrs as $attr) {
 
-            // 获取属性上面的注解@var
-            $reader = new Reader($reflectionClass->getName(), $attr->getName(),'property');
-            $valType = $reader->getParameter('var'); // 通过注解获取到的数据类型
+            // Get the annotation on the property @var
+            $reader = new Reader($reflectionClass->getName(), $attr->getName(), 'property');
+            // The data type obtained through the annotation
+            $valType = $reader->getParameter('var');
 
             $attrName = $attr->getName();
             $accessLevel = 'public';
 
             if ($attr->isPrivate()) {
                 $accessLevel = 'private';
-            }else if ($attr->isProtected()) {
+            } else if ($attr->isProtected()) {
                 $accessLevel = 'protected';
             }
 
@@ -284,21 +288,21 @@ STR;
     /**
      * @param $path
      *
-     * 扫描源码目录 include源码文件
+     * Scan source directory include source files
      *
      */
     private function scanDirFolder($path)
     {
         $temp_list = scandir($path);
         foreach ($temp_list as $file) {
-            //排除根目录
+            // exclude the root directory
             if ($file != ".." && $file != ".") {
                 if (is_dir($path . "/" . $file)) {
-                    //子文件夹，进行递归
+                    // 子文件夹，进行递归
                     $this->scandirFolder($path . "/" . $file);
                 } else {
-                    //根目录下的文件
-                    $filePath = $path.'/'.$file;
+                    // 根目录下的文件
+                    $filePath = $path . '/' . $file;
                     if (pathinfo($filePath)['extension'] == 'php') {
                         @include_once $filePath;
                     }

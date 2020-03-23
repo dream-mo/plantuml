@@ -6,10 +6,10 @@ namespace Dreammo\Plantuml\Helper;
  * Class PlantUMLProperty
  * @package Dreammo\Plantuml\Helper
  *
- * plantuml的类属性
+ * plantuml property class
  *
  */
-class PlantUMLProperty  extends AbstractPlantUMLParam
+class PlantUMLProperty extends AbstractPlantUMLParam
 {
 
 }

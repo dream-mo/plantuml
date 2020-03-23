@@ -6,11 +6,15 @@ namespace Dreammo\Plantuml\Helper;
  * Class PlantUMLMethod
  * @package Dreammo\Plantuml\Helper
  *
- * plantuml的方法类
+ * plantuml method class
  *
  */
 class PlantUMLMethod
 {
+    /**
+     * @var $name
+     *
+     */
     private $name;
 
     /**
@@ -35,7 +39,6 @@ class PlantUMLMethod
         $this->returnDataType = $returnDataType;
         $this->accessLevel = $accessLevel;
     }
-
 
     /**
      * @return mixed
@@ -91,16 +94,20 @@ class PlantUMLMethod
     public function getAccessLevel()
     {
         switch ($this->accessLevel) {
-            case 'public': {
+            case 'public':
+            {
                 return '+';
             }
-            case 'private': {
+            case 'private':
+            {
                 return '-';
             }
-            case 'protected': {
+            case 'protected':
+            {
                 return '#';
             }
-            default : {
+            default :
+            {
                 return '';
             }
         }
@@ -113,5 +120,4 @@ class PlantUMLMethod
     {
         $this->accessLevel = $accessLevel;
     }
-
 }
